@@ -19,12 +19,11 @@ Chat embedado tipo Claude Code, usando a API Anthropic + estas skills.
 
 ## Roadmap das skills
 - [x] ecomplus-reports
-- [ ] ecomplus-auth (próxima)
-- [ ] ecomplus-orders
-- [ ] ecomplus-products
-- [ ] ecomplus-customers
-- [ ] ecomplus-stores
-- [ ] ecomplus-integrations
+- [x] ecomplus-auth
+- [x] ecomplus-orders
+- [x] ecomplus-products
+- [x] ecomplus-customers
+- [x] ecomplus-applications
 
 ## Testes
 Sempre rodar contra sandbox (https://sandbox.e-com.plus/v1/) antes de mexer em produção.
