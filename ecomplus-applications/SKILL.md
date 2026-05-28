@@ -3,9 +3,11 @@ name: ecomplus-applications
 description: >
   Use esta skill para listar, inspecionar e configurar aplicativos instalados
   na loja E-Com Plus. Cobre: listar apps, ver configuração (data/hidden_data),
-  atualizar configuração de um app, e consultar logs de auditoria (changelog de
-  recursos). Palavras-chave: aplicativo, app, integração, configuração, data,
-  hidden_data, logs, auditoria, changelog, marketplace, módulo instalado.
+  atualizar configuração de um app, consultar logs de auditoria da API, e
+  consultar logs de execução no GCP (Firebase Cloud Functions via gcloud CLI).
+  Palavras-chave: aplicativo, app, integração, configuração, data, hidden_data,
+  logs, auditoria, changelog, marketplace, módulo, GCP, gcloud, Firebase,
+  Cloud Functions, erros de função, logs de execução.
 prerequisites:
   - name: ecomplus-auth
     reason: Credenciais (ECOMPLUS_STORE_ID, ECOMPLUS_ACCESS_TOKEN, ECOMPLUS_MY_ID)
@@ -67,13 +69,37 @@ python update_app.py --id 5cf...abc --json-file new_data.json
 python update_app.py --id 5cf...abc --hidden --key api_secret --value "s3cr3t"
 ```
 
-### Consultar logs de auditoria
+### Consultar logs de auditoria (API E-Com Plus)
 
 ```bash
 python get_logs.py --resource-id 5cf...abc           # logs de um pedido/produto/etc.
 python get_logs.py --resource-id 5cf...abc --limit 20
 python get_logs.py --log-id abc123                   # detalhe de uma entrada
 ```
+
+### Consultar logs de execução no GCP (Firebase Cloud Functions)
+
+Os apps rodam como Cloud Functions. Para ver erros de execução, timeouts e
+`console.log` das funções use o `gcloud` CLI:
+
+```bash
+# Últimos 50 logs de uma função
+~/google-cloud-sdk/bin/gcloud functions logs read app \
+  --project=FIREBASE_PROJECT_ID \
+  --account=servidor@e-com.club \
+  --region=us-central1 \
+  --limit=50
+
+# Só erros
+~/google-cloud-sdk/bin/gcloud functions logs read app \
+  --project=FIREBASE_PROJECT_ID \
+  --account=servidor@e-com.club \
+  --region=us-central1 \
+  --min-log-level=ERROR \
+  --limit=50
+```
+
+Ver `references/gcp-logs.md` para projetos conhecidos, contas, e mais exemplos.
 
 ## Campos principais do documento de aplicativo
 
@@ -98,6 +124,7 @@ Ver `references/app-fields.md` para schema completo.
 ## Referências carregadas sob demanda
 
 - `references/app-fields.md` — schema completo, exemplos de PATCH
+- `references/gcp-logs.md` — gcloud CLI, projetos GCP conhecidos, exemplos de log
 
 ## Erros comuns
 
