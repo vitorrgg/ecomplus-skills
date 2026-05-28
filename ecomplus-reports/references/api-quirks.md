@@ -75,6 +75,15 @@ GET /orders.json?financial_status.current=paid&created_at>=2026-04-18T00:00:00.0
 - Formato: ISO 8601 com milissegundos e Z. Ex.: `2026-05-18T13:45:00.000Z`
 - Antes de mostrar pro usuário, converta para `America/Sao_Paulo` (UTC-3).
 
+## Endpoint `/products.json` — comportamento especial
+
+O endpoint de listagem de produtos **não suporta filtros, `fields`, `limit` nem `sort`**. Sempre retorna todos os produtos da loja com apenas três campos: `_id`, `sku`, `slug`. A `query` no `meta` sempre aparece como `{}`.
+
+- Não use `GET /products.json?quantity<=5&fields=sku,name` — os parâmetros são ignorados.
+- Para relatórios de estoque, a estratégia correta é: listar todos os IDs com `/products.json`, depois buscar cada produto individualmente via `/products/{_id}.json` e filtrar no cliente.
+- O endpoint individual `/products/{_id}.json` retorna o documento completo com `name` (string), `price`, `quantity`, `available`, `visible`, variações, etc.
+- O campo `name` no produto individual é **string plana** (ex: `"Plotter FOISON S48"`), não um objeto multilíngue.
+
 ## Caso especial: integração com Bling
 
 Coisa que o Rafael já tropeçou (conversas anteriores):
