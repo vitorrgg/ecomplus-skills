@@ -1,4 +1,4 @@
-# Econpost — Skills E-Com Plus
+Skills e-com.plus
 
 Este repo contém skills para o Claude Code interagir com a API REST
 da E-Com Plus (https://api.e-com.plus/v1/), focadas em relatórios,

@@ -57,7 +57,7 @@ nome-da-skill/
 
 ❌ Fraca: *"Gera relatórios de vendas."*
 
-✅ Forte: *"Use esta skill SEMPRE que o usuário pedir relatórios, métricas ou análises de uma loja E-Com Plus — vendas por período, ticket médio, top produtos, conversão, estoque crítico, faturamento. Gatilhos: 'relatório', 'vendas do mês', 'quanto faturei', 'produtos mais vendidos', 'estoque baixo', 'curva ABC', 'comparar períodos'. Funciona com store_id da plataforma Econpost/E-Com Plus."*
+✅ Forte: *"Use esta skill SEMPRE que o usuário pedir relatórios, métricas ou análises de uma loja E-Com Plus — vendas por período, ticket médio, top produtos, conversão, estoque crítico, faturamento. Gatilhos: 'relatório', 'vendas do mês', 'quanto faturei', 'produtos mais vendidos', 'estoque baixo', 'curva ABC', 'comparar períodos'. Funciona com store_id da plataforma e-com.plus/E-Com Plus."*
 
 A versão forte tem: o que faz, quando usar, gatilhos linguísticos típicos do usuário, contexto da plataforma.
 

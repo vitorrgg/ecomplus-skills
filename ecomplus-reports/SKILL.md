@@ -1,6 +1,6 @@
 ---
 name: ecomplus-reports
-description: Use esta skill SEMPRE que o usuário pedir relatórios, métricas, análises ou números de uma loja na plataforma E-Com Plus / Econpost. Gatilhos linguísticos típicos — "relatório de vendas", "quanto faturei", "vendas do mês", "vendas dessa semana", "top produtos", "produtos mais vendidos", "ticket médio", "estoque baixo", "curva ABC", "comparar períodos", "fechamento financeiro", "quantos pedidos", "faturamento", "performance da loja". Use mesmo se o usuário não disser explicitamente "relatório" — se ele estiver pedindo um número agregado da loja, é esta skill. Funciona com store_id da E-Com Plus e usa a API REST oficial (https://api.e-com.plus/v1/).
+description: Use esta skill SEMPRE que o usuário pedir relatórios, métricas, análises ou números de uma loja na plataforma E-Com Plus / e-com.plus. Gatilhos linguísticos típicos — "relatório de vendas", "quanto faturei", "vendas do mês", "vendas dessa semana", "top produtos", "produtos mais vendidos", "ticket médio", "estoque baixo", "curva ABC", "comparar períodos", "fechamento financeiro", "quantos pedidos", "faturamento", "performance da loja". Use mesmo se o usuário não disser explicitamente "relatório" — se ele estiver pedindo um número agregado da loja, é esta skill. Funciona com store_id da E-Com Plus e usa a API REST oficial (https://api.e-com.plus/v1/).
 ---
 
 # E-Com Plus — Relatórios
