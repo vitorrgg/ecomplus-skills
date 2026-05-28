@@ -1,4 +1,4 @@
-# Econpost / E-Com Plus — Skills para Claude Code
+# e-com.plus / E-Com Plus — Skills para Claude Code
 
 Conjunto de skills para o Claude Code interagir com a API REST da E-Com Plus, focado em relatórios, edição de lojas/produtos/clientes e diagnóstico de integrações (Bling, Pagar.me, etc.). O objetivo final é embedar isso numa interface chat-like para os usuários da plataforma.
 
@@ -77,7 +77,7 @@ Para a sua interface chat embedada futura: você vai usar a API do Anthropic com
 
 2. **Cada skill assume autenticação resolvida.** Os scripts esperam variáveis de ambiente (`ECOMPLUS_STORE_ID`, `ECOMPLUS_ACCESS_TOKEN`, `ECOMPLUS_MY_ID`). Isso vai ser preenchido pela `ecomplus-auth` ou pelo backend da sua interface.
 
-3. **Saídas em tabela markdown por padrão**, com opção de CSV/JSON. Por que? A interface chat renderiza markdown bem, e o usuário final da Econpost quer ver "quanto vendi essa semana", não JSON.
+3. **Saídas em tabela markdown por padrão**, com opção de CSV/JSON. Por que? A interface chat renderiza markdown bem, e o usuário final da e-com.plus quer ver "quanto vendi essa semana", não JSON.
 
 4. **Rate limit awareness.** A API E-Com Plus aceita ~6 req/s autenticadas. Scripts implementam retry com backoff e batch quando possível.
 

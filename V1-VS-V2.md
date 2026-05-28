@@ -8,7 +8,7 @@ para o repo `ecomplus-v2-skills` (v2).
 | Versão | Exemplos de lojas |
 |---|---|
 | **v1** (maioria) | conexaohome, coelhandia, festcakes, foisonbrasil, ministerioler |
-| **v2** | tiasonia, barradoce, efacini, ladofit |
+| **v2** | tiasonia, barradoce, efacini, ladofit, ladorosa |
 
 Como identificar: lojas v2 têm um monorepo com pasta `storefront/` + `functions/many/`
 e usam pacotes `@cloudcommerce/*`. Lojas v1 têm apps separados por integração.
@@ -24,7 +24,7 @@ e usam pacotes `@cloudcommerce/*`. Lojas v1 têm apps separados por integração
 | Produção | `https://api.e-com.plus/v1` | `https://ecomplus.io/v2` |
 | Sandbox | `https://sandbox.e-com.plus/v1` | não confirmado |
 | Padrão de URL | `/RECURSO.json` | `/:STORE_ID/RECURSO` |
-| Store ID na URL | não (vai no header) | sim (`/:1024/customers`) |
+| Store ID na URL | não (vai no header) | sim (`/:1024/customers`) — o `:` antes do ID é **literal**, não notação de parâmetro |
 | Sufixo `.json` | sim (obrigatório) | não |
 
 ### Autenticação
@@ -82,7 +82,7 @@ PATCH https://ecomplus.io/v2/:1024/orders/5cf...abc
 | Apps/integrações | Firebase apps separados por integração (app-bling-erp-v2, app-loyalty-points, etc.) | Tudo no monorepo da loja em `functions/many/` |
 | Pacotes | `@ecomplus/application-sdk`, `@ecomplus/client` | `@cloudcommerce/api`, `@cloudcommerce/firebase` |
 | Deploy | CI/CD por app separado | CI/CD do monorepo da loja |
-| GCP project | Um projeto GCP por integração | Um projeto GCP por loja (contém tudo) |
+| GCP project | Um projeto GCP por integração (`ecom-{app}`, ex: `ecom-bling-erp-v2`) | Um projeto GCP por loja (`ecom2{slug}`, ex: `ecom2tiasonia`) |
 
 ---
 
@@ -98,7 +98,7 @@ BASE_URL = "https://api.e-com.plus/v1"
 BASE_URL = "https://ecomplus.io/v2"
 ```
 
-**`_url()`** — remover sufixo `.json` e incluir store_id no path:
+**`_url()`** — remover sufixo `.json` e incluir store_id no path (nota: `ecomplus-reports` não tem `_url()` — o sufixo `.json` está inline em `get()`; ajustar diretamente lá):
 ```python
 # v1
 def _url(self, path):
@@ -154,7 +154,7 @@ access_token = os.environ.get("ECOM_ACCESS_TOKEN")
 
 | Ponto | v1 | v2 |
 |---|---|---|
-| Login endpoint | `POST /_login.json` com `X-Store-ID: 1` | `POST /login` (sem store_id na URL) |
+| Login endpoint | `POST /_login.json` com `X-Store-ID: 1` (**`1` é intencional** — o login sempre usa store_id `1` nesta etapa, independente da loja) | `POST /login` (sem store_id na URL) |
 | Authenticate endpoint | `POST /_authenticate.json` | `POST /authenticate` |
 | Campos no body | `{ email, pass_md5_hash }` | confirmar (possivelmente `{ email, password }` sem MD5) |
 | Session file keys | `store_id`, `my_id`, `api_key`, `access_token`, `expires` | `store_id`, `authentication_id`, `api_key`, `access_token`, `expires` |

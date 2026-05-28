@@ -9,7 +9,7 @@ edição de loja e diagnóstico de integrações.
 A maioria das lojas opera na v1. Exemplos: conexaohome, coelhandia,
 festcakes, foisonbrasil, ministerioler.
 
-Lojas na **v2** (tiasonia, barradoce, efacini, ladofit) usam uma API
+Lojas na **v2** (tiasonia, barradoce, efacini, ladofit, ladorosa) usam uma API
 diferente (`https://ecomplus.io/v2/`). Para essas lojas use o repo
 **ecomplus-v2-skills**. As diferenças detalhadas estão em `V1-VS-V2.md`.
 

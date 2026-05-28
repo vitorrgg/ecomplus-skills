@@ -10,7 +10,7 @@ description: >
   Cloud Functions, erros de função, logs de execução.
 prerequisites:
   - name: ecomplus-auth
-    reason: Credenciais (ECOMPLUS_STORE_ID, ECOMPLUS_ACCESS_TOKEN, ECOMPLUS_MY_ID)
+    reason: Credenciais v1 (ECOMPLUS_STORE_ID, ECOMPLUS_ACCESS_TOKEN, ECOMPLUS_MY_ID) — necessárias para os scripts de API. Os comandos gcloud da seção de logs GCP usam autenticação própria do gcloud e não dependem dessas credenciais.
 ---
 
 # ecomplus-applications

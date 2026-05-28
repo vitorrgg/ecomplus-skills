@@ -55,8 +55,18 @@ Para listar todas as funções de um projeto:
 
 ## Consultar logs de uma função
 
+O comando abaixo funciona para funções **1ª geração** (apps de plataforma: bling, loyalty, tiny, etc. com projeto `ecom-{app}`). Para lojas v2 (`ecom2{slug}`), que usam `@cloudcommerce/firebase` e podem ter funções de **2ª geração**, use `gcloud functions-v2 logs read` no lugar de `gcloud functions logs read` se o comando gen1 retornar `NOT_FOUND`.
+
 ```bash
+# Gen 1 (apps de plataforma)
 ~/google-cloud-sdk/bin/gcloud functions logs read app \
+  --project=FIREBASE_PROJECT_ID \
+  --account=servidor@e-com.club \
+  --region=us-central1 \
+  --limit=50
+
+# Gen 2 (lojas v2 com @cloudcommerce/firebase)
+~/google-cloud-sdk/bin/gcloud functions-v2 logs read app \
   --project=FIREBASE_PROJECT_ID \
   --account=servidor@e-com.club \
   --region=us-central1 \
@@ -69,7 +79,7 @@ Para listar todas as funções de um projeto:
 |---|---|
 | `--limit=N` | Número de entradas (padrão 20, máx 1000) |
 | `--region=us-central1` | Região (padrão dos apps E-Com Plus) |
-| `--min-log-level=ERROR` | Filtrar por nível: `DEBUG`, `INFO`, `WARNING`, `ERROR` |
+| `--min-log-level=ERROR` | Filtrar por nível: `DEBUG`, `INFO`, `ERROR` (`WARNING` não é valor aceito) |
 | `--start-time="2026-05-27T00:00:00Z"` | Logs a partir de uma data |
 | `--end-time="2026-05-27T23:59:59Z"` | Logs até uma data |
 
