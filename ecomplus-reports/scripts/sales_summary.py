@@ -69,10 +69,18 @@ def summarize(orders: list) -> dict:
 
 
 def render_markdown(summary: dict, date_from: str, date_to: str) -> str:
+    d0 = datetime.strptime(date_from, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    d1 = datetime.strptime(date_to, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    days = (d1 - d0).days + 1
+
+    revenue_per_day = summary["paid_revenue"] / days if days else 0.0
+    orders_per_day = summary["paid_orders"] / days if days else 0.0
+
     lines = []
-    lines.append(f"## Resumo de vendas — {date_from} a {date_to}\n")
+    lines.append(f"## Resumo de vendas — {date_from} a {date_to} ({days} dias)\n")
     lines.append(f"**Faturamento (pagos):** {format_brl(summary['paid_revenue'])}")
-    lines.append(f"**Pedidos pagos:** {summary['paid_orders']}")
+    lines.append(f"**Faturamento/dia:** {format_brl(revenue_per_day)}")
+    lines.append(f"**Pedidos pagos:** {summary['paid_orders']} ({orders_per_day:.1f}/dia)")
     lines.append(f"**Ticket médio:** {format_brl(summary['average_ticket'])}")
     lines.append(f"**Total de pedidos no período:** {summary['total_orders']} (inclui pendentes e cancelados)\n")
 
