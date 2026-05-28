@@ -35,6 +35,7 @@ Chat embedado tipo Claude Code, usando a API Anthropic + estas skills.
 - [x] ecomplus-products
 - [x] ecomplus-customers
 - [x] ecomplus-applications
+- [x] ecomplus-aggregations
 
 ## Testes
 Sempre rodar contra sandbox (`https://sandbox.e-com.plus/v1/`) antes de mexer em produção.
