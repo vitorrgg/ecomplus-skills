@@ -5,11 +5,11 @@ Credenciais: env vars > ~/.ecomplus_session.json
 import json
 import os
 import time
-import urllib.parse
 from pathlib import Path
 from typing import Iterator, Optional
 
 import requests
+from urllib.parse import quote
 
 BASE_URL = "https://api.e-com.plus/v1"
 PAGE_SIZE = 100
@@ -71,14 +71,13 @@ class EcomplusClient:
         raise EcomplusError(f"HTTP {r.status_code} em {ctx}: {msg}")
 
     def get(self, path: str, params: Optional[dict] = None, max_retries: int = 3) -> dict:
-        base = self._url(path)
+        url = self._url(path)
         if params:
             parts = []
             for k, v in params.items():
-                parts.append(str(k) + str(v) if str(k).endswith("=") else f"{k}={v}")
-            url = f"{base}?{'&'.join(parts)}"
-        else:
-            url = base
+                sep = "" if k and k[-1] in (">", "<", "=", "!") else "="
+                parts.append(f"{k}{sep}{quote(str(v), safe='')}")
+            url = f"{url}?{'&'.join(parts)}"
         backoff = 1.0
         for attempt in range(max_retries):
             r = self.session.get(url, timeout=30)

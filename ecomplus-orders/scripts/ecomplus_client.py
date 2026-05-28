@@ -19,6 +19,7 @@ import os
 import time
 import urllib.parse
 import requests
+from urllib.parse import quote
 from typing import Iterator, Optional
 
 
@@ -89,14 +90,13 @@ class EcomplusClient:
 
     def get(self, path: str, params: Optional[dict] = None, max_retries: int = 3) -> dict:
         """GET com retry em 5xx."""
-        base = self._url(path)
+        url = self._url(path)
         if params:
             parts = []
             for k, v in params.items():
-                parts.append(str(k) + str(v) if str(k).endswith("=") else f"{k}={v}")
-            url = f"{base}?{'&'.join(parts)}"
-        else:
-            url = base
+                sep = "" if k and k[-1] in (">", "<", "=", "!") else "="
+                parts.append(f"{k}{sep}{quote(str(v), safe='')}")
+            url = f"{url}?{'&'.join(parts)}"
         backoff = 1.0
         for attempt in range(max_retries):
             r = self.session.get(url, timeout=30)

@@ -15,9 +15,9 @@ Uso:
 """
 import os
 import time
-import urllib.parse
 import requests
 from typing import Iterator, Optional
+from urllib.parse import quote
 
 
 BASE_URL = "https://api.e-com.plus/v1"
@@ -57,22 +57,28 @@ class EcomplusClient:
                 "Defina ECOMPLUS_STORE_ID, ECOMPLUS_ACCESS_TOKEN e ECOMPLUS_MY_ID."
             )
 
-    def get(self, path: str, params: Optional[dict] = None, max_retries: int = 3) -> dict:
-        """GET único, com retry em 5xx."""
+    def _build_url(self, path: str, params: Optional[dict]) -> str:
+        """
+        Monta a URL sem URL-encodar as chaves dos params.
+        A API E-Com Plus exige que operadores como >= e <= cheguem literais
+        na query string — o requests encoda por padrão e quebra o filtro.
+        """
         url = f"{BASE_URL}/{path.lstrip('/')}"
         if not url.endswith(".json"):
-            # API exige .json no final
-            if "?" in url:
-                url = url.replace("?", ".json?", 1)
-            else:
-                url = f"{url}.json"
+            url = f"{url}.json"
         if params:
-            # A API espera filtros literais como created_at>=VALUE (sem encoding).
-            # Chaves que terminam com = já incluem o separador; demais usam =.
             parts = []
             for k, v in params.items():
-                parts.append(str(k) + str(v) if str(k).endswith("=") else f"{k}={v}")
+                # Chaves que terminam com operador de comparação (>=, <=, >, <, !=)
+                # já carregam o = dentro da chave — não adicionar separador extra.
+                sep = "" if k and k[-1] in (">", "<", "=", "!") else "="
+                parts.append(f"{k}{sep}{quote(str(v), safe='')}")
             url = f"{url}?{'&'.join(parts)}"
+        return url
+
+    def get(self, path: str, params: Optional[dict] = None, max_retries: int = 3) -> dict:
+        """GET único, com retry em 5xx."""
+        url = self._build_url(path, params)
 
         backoff = 1.0
         for attempt in range(max_retries):
