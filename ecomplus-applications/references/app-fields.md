@@ -71,11 +71,38 @@ Body: { "exportation": { "orders": ["5cf...abc", "5cf...def"] } }
 
 ## Logs de auditoria (`@logs`)
 
-### Listar logs de um recurso
+### Listar logs de um recurso específico
 
 ```
 GET /@logs.json?resource_id={id}&limit=100
 ```
+
+### Listar logs por período
+
+```
+GET /@logs.json?date_time>={ISO8601}&date_time<={ISO8601}&sort=-date_time&limit=100
+```
+
+Exemplo:
+```
+GET /@logs.json?date_time>=2026-05-01T00:00:00.000Z&date_time<=2026-05-28T23:59:59.999Z&sort=-date_time&limit=100
+```
+
+### Filtros adicionais suportados
+
+| Parâmetro | Exemplo | Observação |
+|---|---|---|
+| `resource_id` | `resource_id=5cf...abc` | _id do documento alterado |
+| `date_time>=` | `date_time>=2026-05-01T00:00:00.000Z` | A partir de (UTC) |
+| `date_time<=` | `date_time<=2026-05-28T23:59:59.999Z` | Até (UTC) |
+| `method` | `method=PATCH` | GET, POST, PATCH, DELETE, PUT |
+| `limit` | `limit=100` | Máx 100 por página |
+| `offset` | `offset=100` | Paginação |
+| `sort` | `sort=-date_time` | Mais recente primeiro |
+
+> **Filtro por tipo de recurso** (`orders`, `products`, etc.): a API não suporta diretamente.
+> O script `get_logs.py --resource-type orders` aplica este filtro client-side verificando
+> se `api_resource` contém `/orders/`.
 
 ### Detalhe de uma entrada de log
 

@@ -72,10 +72,30 @@ python update_app.py --id 5cf...abc --hidden --key api_secret --value "s3cr3t"
 ### Consultar logs de auditoria (API E-Com Plus)
 
 ```bash
-python get_logs.py --resource-id 5cf...abc           # logs de um pedido/produto/etc.
+# Logs de um documento específico (pedido, produto, cliente…)
+python get_logs.py --resource-id 5cf...abc
 python get_logs.py --resource-id 5cf...abc --limit 20
-python get_logs.py --log-id abc123                   # detalhe de uma entrada
+
+# Logs por período
+python get_logs.py --from 2026-05-01
+python get_logs.py --from 2026-05-01 --to 2026-05-28
+
+# Logs por período + tipo de recurso
+python get_logs.py --from 2026-05-01 --to 2026-05-28 --resource-type orders
+python get_logs.py --from 2026-05-01 --resource-type products
+
+# Logs por período + método HTTP
+python get_logs.py --from 2026-05-01 --method PATCH
+python get_logs.py --from 2026-05-01 --method DELETE --resource-type customers
+
+# Exportar CSV para análise
+python get_logs.py --from 2026-05-01 --resource-type orders --format csv
+
+# Detalhe completo de uma entrada (payload + resposta)
+python get_logs.py --log-id abc123
 ```
+
+Filtros disponíveis: `--resource-id`, `--from`, `--to`, `--resource-type` (orders, products, customers, carts, applications…), `--method` (GET, POST, PATCH, DELETE, PUT), `--limit` (default 50), `--format md|json|csv`.
 
 ### Consultar logs de execução no GCP (Firebase Cloud Functions)
 
