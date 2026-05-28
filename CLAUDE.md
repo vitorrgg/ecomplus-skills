@@ -1,18 +1,29 @@
-Skills e-com.plus
+# Skills E-Com Plus — API v1
 
-Este repo contém skills para o Claude Code interagir com a API REST
-da E-Com Plus (https://api.e-com.plus/v1/), focadas em relatórios,
+Este repo contém skills para o Claude Code interagir com a **API REST v1**
+da E-Com Plus (`https://api.e-com.plus/v1/`), focadas em relatórios,
 edição de loja e diagnóstico de integrações.
+
+## Escopo: lojas v1
+
+A maioria das lojas opera na v1. Exemplos: conexaohome, coelhandia,
+festcakes, foisonbrasil, ministerioler.
+
+Lojas na **v2** (tiasonia, barradoce, efacini, ladofit) usam uma API
+diferente (`https://ecomplus.io/v2/`). Para essas lojas use o repo
+**ecomplus-v2-skills**. As diferenças detalhadas estão em `V1-VS-V2.md`.
 
 ## Convenções
 
 - Cada skill é uma pasta com SKILL.md + scripts/ + references/
 - Scripts Python 3, sempre com argparse e --format md|csv|json (default md)
 - Output default em markdown para renderizar bem na interface chat futura
-- Autenticação via env vars: ECOMPLUS_STORE_ID, ECOMPLUS_ACCESS_TOKEN, ECOMPLUS_MY_ID
+- Autenticação v1 via env vars: `ECOMPLUS_STORE_ID`, `ECOMPLUS_ACCESS_TOKEN`, `ECOMPLUS_MY_ID`
 - Valores monetários em BRL formato brasileiro (R$ 1.234,56)
 - Datas: API em UTC, exibição em America/Sao_Paulo
-- Receita = financial_status.current == "paid" AND status != "cancelled"
+- Receita = `financial_status.current == "paid"` AND `status != "cancelled"`
+- Todos os endpoints terminam em `.json` (ex: `GET /customers.json`)
+- Auth via 3 headers: `X-Store-ID`, `X-Access-Token`, `X-My-ID`
 
 ## Stack alvo da interface final
 Chat embedado tipo Claude Code, usando a API Anthropic + estas skills.
@@ -26,4 +37,4 @@ Chat embedado tipo Claude Code, usando a API Anthropic + estas skills.
 - [x] ecomplus-applications
 
 ## Testes
-Sempre rodar contra sandbox (https://sandbox.e-com.plus/v1/) antes de mexer em produção.
+Sempre rodar contra sandbox (`https://sandbox.e-com.plus/v1/`) antes de mexer em produção.
