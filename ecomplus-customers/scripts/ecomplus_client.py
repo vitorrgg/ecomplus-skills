@@ -5,6 +5,7 @@ Credenciais: env vars > ~/.ecomplus_session.json
 import json
 import os
 import time
+import urllib.parse
 from pathlib import Path
 from typing import Iterator, Optional
 
@@ -70,10 +71,17 @@ class EcomplusClient:
         raise EcomplusError(f"HTTP {r.status_code} em {ctx}: {msg}")
 
     def get(self, path: str, params: Optional[dict] = None, max_retries: int = 3) -> dict:
-        url = self._url(path)
+        base = self._url(path)
+        if params:
+            parts = []
+            for k, v in params.items():
+                parts.append(str(k) + str(v) if str(k).endswith("=") else f"{k}={v}")
+            url = f"{base}?{'&'.join(parts)}"
+        else:
+            url = base
         backoff = 1.0
         for attempt in range(max_retries):
-            r = self.session.get(url, params=params, timeout=30)
+            r = self.session.get(url, timeout=30)
             if r.status_code < 400:
                 return r.json()
             if r.status_code in (502, 503, 504) and attempt < max_retries - 1:

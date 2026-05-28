@@ -15,6 +15,7 @@ Uso:
 """
 import os
 import time
+import urllib.parse
 import requests
 from typing import Iterator, Optional
 
@@ -65,10 +66,17 @@ class EcomplusClient:
                 url = url.replace("?", ".json?", 1)
             else:
                 url = f"{url}.json"
+        if params:
+            # A API espera filtros literais como created_at>=VALUE (sem encoding).
+            # Chaves que terminam com = já incluem o separador; demais usam =.
+            parts = []
+            for k, v in params.items():
+                parts.append(str(k) + str(v) if str(k).endswith("=") else f"{k}={v}")
+            url = f"{url}?{'&'.join(parts)}"
 
         backoff = 1.0
         for attempt in range(max_retries):
-            response = self.session.get(url, params=params, timeout=30)
+            response = self.session.get(url, timeout=30)
             if response.status_code < 400:
                 return response.json()
             if response.status_code in (502, 503, 504):

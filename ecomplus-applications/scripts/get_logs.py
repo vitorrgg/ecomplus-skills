@@ -120,7 +120,8 @@ def main():
 
         print(f"\n> Use `--log-id <id>` para ver o detalhe de uma entrada "
               f"(payload + resposta completa).")
-        print(f"> Log IDs: {', '.join(f'`{l[\"id\"]}`' for l in logs[:3])}{'...' if len(logs) > 3 else ''}")
+        ids_preview = ", ".join(f"`{l['id']}`" for l in logs[:3])
+        print(f"> Log IDs: {ids_preview}{'...' if len(logs) > 3 else ''}")
 
     except EcomplusError as e:
         print(f"Erro: {e}", file=sys.stderr)

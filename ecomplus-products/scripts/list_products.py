@@ -42,35 +42,31 @@ def main():
     parser.add_argument("--sandbox", action="store_true")
     args = parser.parse_args()
 
-    params = {
-        "sort": "-updated_at",
-        "fields": "_id,sku,name,price,base_price,quantity,available,visible,categories.name,brands.name",
-    }
+    # A API v1 ignora `fields` e `limit` na listagem de produtos —
+    # retorna apenas _id, sku, slug. Filtramos IDs aqui e fazemos GET
+    # individual para cada produto dentro do limite solicitado.
+    list_params = {"sort": "-updated_at"}
 
     if args.available is not None:
-        params["available"] = args.available
+        list_params["available"] = args.available
     if args.visible is not None:
-        params["visible"] = args.visible
+        list_params["visible"] = args.visible
     if args.max_stock is not None:
-        params["quantity<="] = args.max_stock
+        list_params["quantity<="] = args.max_stock
     if args.min_stock is not None:
-        params["quantity>="] = args.min_stock
-    if args.on_sale:
-        # A API não suporta comparação entre campos, filtramos no cliente
-        pass
+        list_params["quantity>="] = args.min_stock
     if args.category:
-        # Tenta por nome, fallback para _id
         if len(args.category) == 24 and args.category.isalnum():
-            params["categories._id"] = args.category
+            list_params["categories._id"] = args.category
         else:
-            params["categories.name"] = args.category
+            list_params["categories.name"] = args.category
     if args.brand:
         if len(args.brand) == 24 and args.brand.isalnum():
-            params["brands._id"] = args.brand
+            list_params["brands._id"] = args.brand
         else:
-            params["brands.name"] = args.brand
+            list_params["brands.name"] = args.brand
     if args.sku:
-        params["sku"] = args.sku
+        list_params["sku"] = args.sku
 
     try:
         client = EcomplusClient.from_env()
@@ -79,7 +75,20 @@ def main():
             ecomplus_client.BASE_URL = "https://sandbox.e-com.plus/v1"
 
         products = []
-        for p in client.list_all("products", params=params):
+        for stub in client.list_all("products", params=list_params):
+            product_id = stub.get("_id")
+            if not product_id:
+                continue
+            p = client.get(f"products/{product_id}")
+            qty = p.get("quantity", 0) or 0
+            if args.max_stock is not None and qty > args.max_stock:
+                continue
+            if args.min_stock is not None and qty < args.min_stock:
+                continue
+            if args.available is not None and str(p.get("available", "")).lower() != args.available:
+                continue
+            if args.visible is not None and str(p.get("visible", "")).lower() != args.visible:
+                continue
             if args.on_sale:
                 bp = p.get("base_price")
                 pr = p.get("price", 0)
